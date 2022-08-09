@@ -22,6 +22,7 @@ export class App extends Component {
   addNewUrl = (newUrl) => {
     postUrls(newUrl)
     .then(data => {
+      console.log(data)
       this.setState({urls: [...this.state.urls, data]})
     })
   }
