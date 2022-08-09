@@ -82,21 +82,6 @@ describe('URL Shortner Page Flow', () => {
     cy.get('.url').eq(2).contains('.url-short-link', 'http://localhost:3001/useshorturl/3')
     cy.get('.url').eq(2).contains('.url-long-link', 'https://wallpaperheart.com/wp-content/uploads/2018/04/cool-1080p-wallpapers3.jpg')
   })
-  it('should POST the new urls to the API', () => {
-    cy.request({
-      method: "POST",
-      url: "http://localhost:3001/api/v1/urls",
-      body: {
-        long_url: "https://wallpaperheart.com/wp-content/uploads/2018/04/cool-1080p-wallpapers3.jpg",
-        title: "Nice wallpaper",
-        id: 3,
-        short_url: "http://localhost:3001/useshorturl/3"
-      }
-    }).then((response) => {
-      expect(response.status).to.eq(201)
-      expect(response.statusText).to.eq("Created")
-    })
-  })
   it('should not POST the new url without all of the required information', () => {
     cy.request({
       method: "POST",
