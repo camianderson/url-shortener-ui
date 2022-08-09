@@ -24,6 +24,15 @@ describe('URL Shortner Page Flow', () => {
       }]).as('deleteUrl')
     cy.visit('http://localhost:3000/')
   })
+  it('should GET all the urls from the API', () => {
+    cy.request({
+      method: "GET",
+      url: "http://localhost:3001/api/v1/urls",
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.statusText).to.eq("OK")
+    })
+  })
   it('should not GET if the server url is incorrect', () => {
     cy.request({
       method: "GET",
@@ -73,6 +82,21 @@ describe('URL Shortner Page Flow', () => {
     cy.get('.url').eq(2).contains('.url-short-link', 'http://localhost:3001/useshorturl/3')
     cy.get('.url').eq(2).contains('.url-long-link', 'https://wallpaperheart.com/wp-content/uploads/2018/04/cool-1080p-wallpapers3.jpg')
   })
+  it('should POST the new urls to the API', () => {
+    cy.request({
+      method: "POST",
+      url: "http://localhost:3001/api/v1/urls",
+      body: {
+        long_url: "https://wallpaperheart.com/wp-content/uploads/2018/04/cool-1080p-wallpapers3.jpg",
+        title: "Nice wallpaper",
+        id: 3,
+        short_url: "http://localhost:3001/useshorturl/3"
+      }
+    }).then((response) => {
+      expect(response.status).to.eq(201)
+      expect(response.statusText).to.eq("Created")
+    })
+  })
   it('should not POST the new url without all of the required information', () => {
     cy.request({
       method: "POST",
@@ -86,7 +110,7 @@ describe('URL Shortner Page Flow', () => {
       expect(response.statusText).to.contain('Unprocessable Entity')
     })
   })
-  it('should be able to delete a shortened url', () => {
+  it('should be able to delete the 3rd shortened url', () => {
     cy.get('.input-title').type('Nice wallpaper')
     cy.get('.input-url').type('https://wallpaperheart.com/wp-content/uploads/2018/04/cool-1080p-wallpapers3.jpg')
     cy.get('.submit-button').click()
@@ -95,5 +119,4 @@ describe('URL Shortner Page Flow', () => {
     cy.get('.url').eq(0).contains('.url-title', 'Awesome photo')
     cy.get('.url').eq(1).contains('.url-title', 'Cool Cat')
   })
-
 })
