@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { getUrls, postUrls } from '../../apiCalls';
+import { getUrls, postUrls, deleteUrl } from '../../apiCalls';
 import UrlContainer from '../UrlContainer/UrlContainer';
 import UrlForm from '../UrlForm/UrlForm';
 
@@ -26,6 +26,16 @@ export class App extends Component {
     })
   }
 
+  deleteUrl = (id) => {
+    deleteUrl(id)
+    .then(response => {
+      if(response.ok){
+        const filteredUrls = this.state.urls.filter(url => url.id !== id);
+        this.setState({urls: filteredUrls})
+      }
+    })
+  }
+
   render() {
     return (
       <main className="App">
@@ -33,7 +43,7 @@ export class App extends Component {
           <h1 className='page-title'>URL Shortener</h1>
           <UrlForm addUrl={this.addNewUrl}/>
         </header>
-        <UrlContainer urls={this.state.urls}/>
+        <UrlContainer urls={this.state.urls} delete={this.deleteUrl}/>
       </main>
     );
   }

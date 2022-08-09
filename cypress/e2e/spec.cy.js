@@ -12,7 +12,7 @@ describe('URL Shortner Page Flow', () => {
     })
     cy.visit('http://localhost:3000/')
   })
-  it('should not GET the url if the server url is incorrect', () => {
+  it('should not GET if the server url is incorrect', () => {
     cy.request({
       method: "GET",
       url: "http://localhost:3001/api/v1/url",
