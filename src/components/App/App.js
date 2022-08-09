@@ -22,7 +22,6 @@ export class App extends Component {
   addNewUrl = (newUrl) => {
     postUrls(newUrl)
     .then(data => {
-      console.log(data)
       this.setState({urls: [...this.state.urls, data]})
     })
   }
@@ -34,7 +33,6 @@ export class App extends Component {
           <h1 className='page-title'>URL Shortener</h1>
           <UrlForm addUrl={this.addNewUrl}/>
         </header>
-
         <UrlContainer urls={this.state.urls}/>
       </main>
     );

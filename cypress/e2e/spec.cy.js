@@ -10,8 +10,17 @@ describe('URL Shortner Page Flow', () => {
       id: 3,
       short_url: "http://localhost:3001/useshorturl/3"
     })
-
     cy.visit('http://localhost:3000/')
+  })
+  it('should not GET the url if the server url is incorrect', () => {
+    cy.request({
+      method: "GET",
+      url: "http://localhost:3001/api/v1/url",
+      failOnStatusCode: false
+    }).then((response) => {
+      expect(response.status).to.eq(404)
+      expect(response.statusText).to.contain('Not Found')
+    })
   })
   it('should visit the main page', () => {
     cy.visit('http://localhost:3000/')
@@ -49,5 +58,17 @@ describe('URL Shortner Page Flow', () => {
     cy.get('.url').eq(2).contains('.url-short-link', 'http://localhost:3001/useshorturl/3')
     cy.get('.url').eq(2).contains('.url-long-link', 'https://wallpaperheart.com/wp-content/uploads/2018/04/cool-1080p-wallpapers3.jpg')
   })
-
+  it('should not POST the new url without all of the required information', () => {
+    cy.request({
+      method: "POST",
+      url: "http://localhost:3001/api/v1/urls",
+      body: {
+        long_url: "https://wallpaperheart.com/wp-content/uploads/2018/04/cool-1080p-wallpapers3.jpg"
+      },
+      failOnStatusCode: false
+    }).then((response) => {
+      expect(response.status).to.eq(422)
+      expect(response.statusText).to.contain('Unprocessable Entity')
+    })
+  })
 })
